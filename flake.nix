@@ -26,6 +26,7 @@
             nativeBuildInputs = [
               pkgs.zig
               pkgs.git
+              pkgs.cabal-install
             ];
 
             withHoogle = true;
