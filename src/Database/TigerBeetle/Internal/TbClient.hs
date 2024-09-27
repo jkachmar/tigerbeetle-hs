@@ -3,9 +3,12 @@
 
 
 {-# LINE 1 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 
+
+-- Enumerations
 
 data TB_ACCOUNT_FLAGS = TbAccountLinked
                       | TbAccountDebitsMustNotExceedCredits
@@ -54,7 +57,7 @@ instance Enum TB_ACCOUNT_FLAGS where
   toEnum 32 = TbAccountClosed
   toEnum unmatched = error ("TB_ACCOUNT_FLAGS.toEnum: Cannot match " ++ show unmatched)
 
-{-# LINE 5 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LINE 8 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
 
 
 data TB_TRANSFER_FLAGS = TbTransferLinked
@@ -119,7 +122,7 @@ instance Enum TB_TRANSFER_FLAGS where
   toEnum 256 = TbTransferImported
   toEnum unmatched = error ("TB_TRANSFER_FLAGS.toEnum: Cannot match " ++ show unmatched)
 
-{-# LINE 7 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LINE 10 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
 
 
 data TB_CREATE_ACCOUNT_RESULT = TbCreateAccountOk
@@ -274,7 +277,7 @@ instance Enum TB_CREATE_ACCOUNT_RESULT where
   toEnum 26 = TbCreateAccountImportedEventTimestampMustNotRegress
   toEnum unmatched = error ("TB_CREATE_ACCOUNT_RESULT.toEnum: Cannot match " ++ show unmatched)
 
-{-# LINE 9 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LINE 12 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
 
 
 data TB_CREATE_TRANSFER_RESULT = TbCreateTransferOk
@@ -639,7 +642,7 @@ instance Enum TB_CREATE_TRANSFER_RESULT where
   toEnum 68 = TbCreateTransferIdAlreadyFailed
   toEnum unmatched = error ("TB_CREATE_TRANSFER_RESULT.toEnum: Cannot match " ++ show unmatched)
 
-{-# LINE 11 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LINE 14 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
 
 
 data TB_ACCOUNT_FILTER_FLAGS = TbAccountFilterDebits
@@ -674,7 +677,7 @@ instance Enum TB_ACCOUNT_FILTER_FLAGS where
   toEnum 4 = TbAccountFilterReversed
   toEnum unmatched = error ("TB_ACCOUNT_FILTER_FLAGS.toEnum: Cannot match " ++ show unmatched)
 
-{-# LINE 13 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LINE 16 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
 
 
 data TB_OPERATION = TbOperationPulse
@@ -739,7 +742,7 @@ instance Enum TB_OPERATION where
   toEnum 136 = TbOperationQueryTransfers
   toEnum unmatched = error ("TB_OPERATION.toEnum: Cannot match " ++ show unmatched)
 
-{-# LINE 15 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LINE 18 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
 
 
 data TB_PACKET_STATUS = TbPacketOk
@@ -784,7 +787,7 @@ instance Enum TB_PACKET_STATUS where
   toEnum 4 = TbPacketInvalidDataSize
   toEnum unmatched = error ("TB_PACKET_STATUS.toEnum: Cannot match " ++ show unmatched)
 
-{-# LINE 17 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LINE 20 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
 
 
 data TB_STATUS = TbStatusSuccess
@@ -839,7 +842,14 @@ instance Enum TB_STATUS where
   toEnum 6 = TbStatusNetworkSubsystem
   toEnum unmatched = error ("TB_STATUS.toEnum: Cannot match " ++ show unmatched)
 
-{-# LINE 19 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+{-# LINE 22 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
 
 
+-- Pointer Types
+
+newtype TbClient = TbClient (C2HSImp.Ptr (TbClient))
+{-# LINE 26 "src/Database/TigerBeetle/Internal/TbClient.chs" #-}
+
+
+import qualified Foreign.Ptr as C2HSImp
 
