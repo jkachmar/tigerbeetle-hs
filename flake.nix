@@ -27,7 +27,6 @@
               pkgs.zig
               pkgs.git
               pkgs.cabal-install
-              pkgs.haskellPackages.c2hs
             ];
 
             withHoogle = true;
