@@ -2,4 +2,4 @@ dist/
 dist-newstyle/
 /.direnv/
 TODO.org
-include/
+include/tigerbeetle/

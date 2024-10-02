@@ -53,6 +53,8 @@ extra-doc-files:    CHANGELOG.md
 
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
 extra-source-files: include/tigerbeetle/src/clients/c/tb_client.h
+                  , include/tb_client_shim.h
+                  , include/tb_client_shim.c
 
 common warnings
     ghc-options: -Wall
@@ -65,19 +67,29 @@ library
     exposed-modules:  Database.TigerBeetle
 
     -- Modules included in this library but not exported.
-    -- other-modules:
+    -- other-modules: Database.TigerBeetle.Internal.Foreign
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.18.0.0
+                    , bytestring
+                    , wide-word == 0.1.6.0
 
     -- Directories containing source files.
     hs-source-dirs:   src
 
     -- Base language which the package is written in.
     default-language: Haskell2010
+
+    include-dirs: include
+                , include/tigerbeetle/src/clients/c
+
+    c-sources: include/tb_client_shim.c
+
+    install-includes: tm_client.h
+                    , tb_client_shim.h
 
 test-suite tigerbeetle-hs-test
     -- Import common warning flags.
