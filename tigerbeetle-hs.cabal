@@ -67,7 +67,7 @@ library
     exposed-modules:  Database.TigerBeetle
 
     -- Modules included in this library but not exported.
-    -- other-modules: Database.TigerBeetle.Internal.Foreign
+    other-modules: Database.TigerBeetle.Internal.FFI
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
