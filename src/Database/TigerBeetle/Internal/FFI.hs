@@ -1,5 +1,6 @@
 {-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE CApiFFI #-}
+{-# LANGUAGE TypeApplications #-}
 
 module Database.TigerBeetle.Internal.FFI where
 
@@ -47,7 +48,17 @@ type TbOnCompletion
   -> Ptr ()
 
 foreign import capi "tb_client_shim.h hs_tb_client_init"
-  hs_tb_client_shim
+  hs_tb_client_init
+  :: Ptr TbClient
+  -> Ptr Word128
+  -> CString
+  -> CUInt
+  -> CUIntPtr
+  -> FunPtr TbOnCompletion
+  -> IO CInt
+
+foreign import capi "tb_client_shim.h hs_tb_client_init_echo"
+  hs_tb_client_init_echo
   :: Ptr TbClient
   -> Ptr Word128
   -> CString
