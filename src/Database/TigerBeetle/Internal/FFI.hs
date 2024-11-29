@@ -45,7 +45,7 @@ type TbOnCompletion
   -> Ptr TbPacket
   -> Ptr CChar
   -> CUInt
-  -> Ptr ()
+  -> IO ()
 
 foreign import capi "tb_client_shim.h hs_tb_client_init"
   hs_tb_client_init
@@ -75,3 +75,6 @@ unsafeMkWord128Ptr w = do
   p <- malloc @Word128
   poke p w
   pure p
+
+unsafeMkTbClient :: IO (Ptr TbClient)
+unsafeMkTbClient = malloc @() >>= pure . castPtr
