@@ -6,7 +6,9 @@ module Database.TigerBeetle.Internal.FFI where
 import Data.WideWord.Word128
 import Foreign.C.String
 import Foreign.C.Types
+import Foreign.Marshal.Alloc
 import Foreign.Ptr
+import Foreign.Storable
 
 data TbClient
 data UserData
@@ -53,3 +55,12 @@ foreign import capi "tb_client_shim.h hs_tb_client_init"
   -> CUIntPtr
   -> FunPtr TbOnCompletion
   -> IO CInt
+
+-- | Creates a Ptr Word128.
+--
+-- Caller is responsible for calling 'free' on the pointer.
+unsafeMkWord128Ptr :: Word128 -> IO (Ptr Word128)
+unsafeMkWord128Ptr w = do
+  p <- malloc @Word128
+  poke p w
+  pure p
