@@ -4,6 +4,7 @@
 
 module Database.TigerBeetle.Internal.FFI where
 
+import Control.Exception
 import Data.WideWord.Word128
 import Foreign.C.String
 import Foreign.C.Types
@@ -75,6 +76,9 @@ unsafeMkWord128Ptr w = do
   p <- malloc @Word128
   poke p w
   pure p
+
+withWord128Ptr :: Word128 -> (Ptr Word128 -> IO a) -> IO a
+withWord128Ptr w = bracket (unsafeMkWord128Ptr w) free
 
 unsafeMkTbClient :: IO (Ptr TbClient)
 unsafeMkTbClient = malloc @() >>= pure . castPtr
