@@ -82,3 +82,5 @@ withWord128Ptr w = bracket (unsafeMkWord128Ptr w) free
 
 unsafeMkTbClient :: IO (Ptr TbClient)
 unsafeMkTbClient = malloc @() >>= pure . castPtr
+
+withTbClient = bracket unsafeMkTbClient free
