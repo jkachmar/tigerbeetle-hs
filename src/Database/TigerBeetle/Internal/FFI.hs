@@ -68,6 +68,12 @@ foreign import capi "tb_client_shim.h hs_tb_client_init_echo"
   -> FunPtr TbOnCompletion
   -> IO CInt
 
+foreign import capi "tb_client.h tb_client_submit"
+  hs_tb_client_submit
+  :: Ptr TbClient
+  -> Ptr TbPacket
+  -> IO ()
+
 -- | Creates a Ptr Word128.
 --
 -- Caller is responsible for calling 'free' on the pointer.
@@ -83,4 +89,5 @@ withWord128Ptr w = bracket (unsafeMkWord128Ptr w) free
 unsafeMkTbClient :: IO (Ptr TbClient)
 unsafeMkTbClient = malloc @() >>= pure . castPtr
 
+withTbClient :: (Ptr TbClient -> IO a) -> IO a
 withTbClient = bracket unsafeMkTbClient free

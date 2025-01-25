@@ -19,3 +19,8 @@ TB_STATUS hs_tb_client_init_echo(
     uintptr_t on_completion_ctx,
     void (*on_completion)(uintptr_t, tb_client_t, tb_packet_t*, const uint8_t*, uint32_t)
 );
+
+void hs_tb_client_submit(
+    tb_client_t* client,
+    tb_packet_t* packet
+);
