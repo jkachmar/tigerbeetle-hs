@@ -6,6 +6,7 @@ module Database.TigerBeetle.Internal.FFI where
 
 import Control.Exception
 import Data.WideWord.Word128
+import Data.Word
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.Marshal.Alloc
@@ -14,7 +15,7 @@ import Foreign.Storable
 
 data TbClient
 data UserData
-data TbPacketData
+type TbPacketData = ()
 
 data TbStatus
   = TbStatusSuccess
@@ -25,6 +26,30 @@ data TbStatus
   | TbStatusSystemResources
   | TbStatusNetworkSubsystem
   deriving (Enum, Eq, Show)
+
+data TbAccount
+  = TbAccount
+  { tbAccountId             :: Word128
+  , tbAccountDebitsPending  :: Word128
+  , tbAccountDebitsPosted   :: Word128
+  , tbAccountCreditsPending :: Word128
+  , tbAccountCreditsPosted  :: Word128
+  , tbAccountUserData128    :: Word128
+  , tbAccountUserData64     :: Word64
+  , tbAccountUserData32     :: Word32
+  , tbAccountReserved       :: Word32
+  , tbAccountLedger         :: Word32
+  , tbAccountCode           :: Word16
+  , tbAccountFlags          :: Word16
+  , tbAccountTimestamp      :: Word64
+  }
+
+instance Storable TbAccount where
+  sizeOf = undefined
+  alignment = undefined
+  peek = undefined
+  poke = undefined
+
 
 data TbOperation
   = TbOperationPulse
@@ -61,18 +86,26 @@ instance Enum TbOperation where
    toEnum unmatched
      = error $ "TbOperation.toEnum cannot match: " ++ show unmatched
 
+data TbPacketStatus
+  = TbPacketOk
+  | TbPacketTooMuchData
+  | TbPacketClientShutdown
+  | TbPacketInvalidOperation
+  | TbPacketInvalidDataSize
+  deriving (Bounded, Enum, Eq, Show)
+
 data TbPacket
   = TbPacket
-  { tbPacketNext :: Ptr TbPacket
-  , tbPacketUserData :: Ptr UserData
+  { tbPacketNext      :: Ptr TbPacket
+  , tbPacketUserData  :: Ptr UserData
   , tbPacketOperation :: CChar
-  , tbPacketStatus :: CChar
-  , tbPacketDataSize :: CUInt
-  , tbPacketData :: Ptr TbPacketData
+  , tbPacketStatus    :: CChar
+  , tbPacketDataSize  :: CUInt
+  , tbPacketData      :: Ptr TbPacketData
   , tbPacketBatchNext :: Ptr TbPacket
   , tbPacketBatchTail :: Ptr TbPacket
   , tbPacketBatchSize :: CUInt
-  , tbPacketReserved :: Ptr CChar
+  , tbPacketReserved  :: Ptr CChar
   }
 
 type TbOnCompletion
