@@ -26,6 +26,41 @@ data TbStatus
   | TbStatusNetworkSubsystem
   deriving (Enum, Eq, Show)
 
+data TbOperation
+  = TbOperationPulse
+  | TbOperationCreateAccounts
+  | TbOperationCreateTransfers
+  | TbOperationLookupAccounts
+  | TbOperationLookupTransfers
+  | TbOperationGetAccountTransfers
+  | TbOperationGetAccountBalances
+  | TbOperationQueryAccounts
+  | TbOperationQueryTransfers
+  deriving (Eq, Show)
+
+instance Enum TbOperation where
+   fromEnum TbOperationPulse = 128
+   fromEnum TbOperationCreateAccounts = 129
+   fromEnum TbOperationCreateTransfers = 130
+   fromEnum TbOperationLookupAccounts = 131
+   fromEnum TbOperationLookupTransfers = 132
+   fromEnum TbOperationGetAccountTransfers = 133
+   fromEnum TbOperationGetAccountBalances = 134
+   fromEnum TbOperationQueryAccounts = 135
+   fromEnum TbOperationQueryTransfers = 136
+
+   toEnum 128 = TbOperationPulse
+   toEnum 129 = TbOperationCreateAccounts
+   toEnum 130 = TbOperationCreateTransfers
+   toEnum 131 = TbOperationLookupAccounts
+   toEnum 132 = TbOperationLookupTransfers
+   toEnum 133 = TbOperationGetAccountTransfers
+   toEnum 134 = TbOperationGetAccountBalances
+   toEnum 135 = TbOperationQueryAccounts
+   toEnum 136 = TbOperationQueryTransfers
+   toEnum unmatched
+     = error $ "TbOperation.toEnum cannot match: " ++ show unmatched
+
 data TbPacket
   = TbPacket
   { tbPacketNext :: Ptr TbPacket
