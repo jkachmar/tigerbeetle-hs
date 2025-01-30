@@ -7,7 +7,7 @@ these guidelines.
 
 - Join us in `#community-client-haskell` on the official TigerBeetle
   Slack
-- Find our Roadmap in the Github wiki to find where we're going
+- Find our [Roadmap](https://github.com/agentultra/tigerbeetle-hs) in the Github wiki to find where we're going
 - We use Github issues for issue management
 
 ## Development Environment Setup ##
