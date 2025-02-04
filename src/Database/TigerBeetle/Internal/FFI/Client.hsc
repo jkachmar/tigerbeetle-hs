@@ -2,6 +2,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE StrictData #-}
+{-# LANGUAGE NoFieldSelectors #-}
 
 module Database.TigerBeetle.Internal.FFI.Client where
 
@@ -9,7 +10,6 @@ import Control.Monad
 import Data.Word
 import Foreign.C.Types
 import Foreign.Ptr
-import Foreign.Marshal.Array
 import Foreign.Marshal.Alloc
 import Foreign.C.String
 import Foreign.Storable

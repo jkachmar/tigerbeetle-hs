@@ -73,11 +73,14 @@ library
   -- LANGUAGE extensions used by modules in this package.
   default-extensions:
     ImportQualifiedPost
+    OverloadedRecordDot
 
   -- Other library packages from which modules are imported.
   build-depends:
     , base        ^>=4.18.0.0
     , bytestring
+    , stm
+    , text
     , wide-word   ==0.1.6.0
 
   -- Directories containing source files.
@@ -87,6 +90,15 @@ library
   default-language: Haskell2010
   include-dirs:     include
   extra-libraries:  tb_client
+
+executable tigerbeetle-hs
+  import:         warnings
+  main-is:        Main.hs
+  hs-source-dirs: app
+  build-depends:  
+    , base
+    , tigerbeetle-hs
+    , stm
 
 test-suite tigerbeetle-hs-test
   -- Import common warning flags.

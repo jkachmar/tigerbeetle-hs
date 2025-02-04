@@ -4,14 +4,11 @@ import Control.Concurrent.STM (atomically)
 import Control.Concurrent.STM.TQueue (TQueue, writeTQueue)
 import Data.Text (Text)
 import Data.Text.Foreign qualified as T
-import Data.Functor ((<&>))
 import Data.Word (Word8)
-import Foreign (Ptr)
-import Foreign.C.String (withCString)
 import Foreign.Marshal.Alloc (alloca)
 import Foreign.Marshal.Array (peekArray, withArray)
 import Foreign.Storable
-import TigerBeetle.FFI.Client
+import Database.TigerBeetle.Internal.FFI.Client
 
 -- | Response type for handling callbacks
 data Response = Response
@@ -33,7 +30,7 @@ initClient clusterId addr responseQueue =
   alloca $ \out_client -> do
     -- Create the callback function that will write to our TQueue
     let callback :: CompletionCallback
-        callback ctx client packetPtr reserved dataPtr dataSize = do
+        callback _ctx _client packetPtr _reserved dataPtr dataSize = do
           packet <- peek packetPtr
           print packet
           -- TODO: Figure out the actual semantics for the callback function here
