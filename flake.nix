@@ -63,6 +63,7 @@
           pkgs.zig
           pkgs.tigerbeetle
           self.packages.${system}.libtb_client
+          pkgs.glibc
         ];
       });
 
