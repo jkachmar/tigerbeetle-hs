@@ -100,9 +100,9 @@ data Packet = Packet
 
 instance Storable Packet where
     sizeOf _ = #{size tb_packet_t}
-    
+
     alignment _ = #{alignment tb_packet_t}
-    
+
     peek ptr = do
         next         <- #{peek tb_packet_t, next} ptr
         userData     <- #{peek tb_packet_t, user_data} ptr
@@ -114,7 +114,7 @@ instance Storable Packet where
         batchTail    <- #{peek tb_packet_t, batch_tail} ptr
         batchSize    <- #{peek tb_packet_t, batch_size} ptr
         batchAllowed <- #{peek tb_packet_t, batch_allowed} ptr
-        reserved     <- forM [0..6] $ \i -> 
+        reserved     <- forM [0..6] $ \i ->
             peekByteOff (#{ptr tb_packet_t, reserved} ptr) i
         return $ Packet
             { next = next
@@ -129,7 +129,7 @@ instance Storable Packet where
             , batchAllowed = batchAllowed
             , reserved = reserved
             }
-    
+
     poke ptr packet = do
         #{poke tb_packet_t, next} ptr packet.next
         #{poke tb_packet_t, user_data} ptr packet.userData
@@ -159,7 +159,7 @@ type Client = Ptr ()
 type CallbackContext = CUIntPtr
 
 -- Completion callback type
-type CompletionCallback = 
+type CompletionCallback =
     CallbackContext ->  -- Context
     Client ->           -- Client
     Ptr Packet ->       -- Packet
@@ -178,7 +178,7 @@ foreign import ccall safe "tb_client.h tb_client_init"
                   -> CallbackContext           -- on_completion_ctx
                   -> FunPtr CompletionCallback -- on_completion
                   -> IO CInt
-tb_client_init 
+tb_client_init
   :: Ptr Client
   -> Ptr Word8
   -> CString
@@ -186,7 +186,7 @@ tb_client_init
   -> CallbackContext
   -> FunPtr CompletionCallback
   -> IO Status
-tb_client_init client clusterId addr addrLen ctx cb = 
+tb_client_init client clusterId addr addrLen ctx cb =
     toEnum . fromIntegral <$> tb_client_init_f client clusterId addr addrLen ctx cb
 
 foreign import ccall safe "tb_client.h tb_client_init_echo"
@@ -198,7 +198,7 @@ foreign import ccall safe "tb_client.h tb_client_init_echo"
                        -> FunPtr CompletionCallback -- on_completion
                        -> IO CInt
 
-tb_client_init_echo 
+tb_client_init_echo
   :: Ptr Client
   -> Ptr Word8
   -> CString
@@ -206,7 +206,7 @@ tb_client_init_echo
   -> CallbackContext
   -> FunPtr CompletionCallback
   -> IO Status
-tb_client_init_echo client clusterId addr addrLen ctx cb = 
+tb_client_init_echo client clusterId addr addrLen ctx cb =
     toEnum . fromIntegral <$> tb_client_init_echo_f client clusterId addr addrLen ctx cb
 
 foreign import ccall safe "tb_client.h tb_client_completion_context"
