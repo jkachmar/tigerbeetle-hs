@@ -60,7 +60,7 @@ in
         owner = "tigerbeetle";
         repo = "tigerbeetle";
         rev = tigerbeetle-src.rev;
-        hash = "sha256-V8g1bvqINo8WxFSv8AkqE/WPUcPwQ1BtisV9+tLyEp4=";
+        hash = "sha256-RIwpoTNxwUsfvqQSD/Y0iJriv3okZFzCBF9vZiarxCI=";
       };
       nativeBuildInputs = [
         pkgs.git
