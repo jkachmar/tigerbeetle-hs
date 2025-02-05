@@ -70,8 +70,9 @@ the `tb_client` library.  That's how we create accounts, transfers,
 and do queries.
 
 ``` mermaid
-Haskell->>tb_client: submit an operation packet with on_completion_ctx 1
-tb_client->>Haskell: on_completion with on_completion_ctx 1, return tb_packet
+sequenceDiagram
+    Haskell->>tb_client: submit an operation packet with on_completion_ctx 1
+    tb_client->>Haskell: on_completion with on_completion_ctx 1, return tb_packet
 ```
 
 We then get the response back in `tb_packet` again through the
