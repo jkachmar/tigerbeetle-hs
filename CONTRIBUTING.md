@@ -63,6 +63,20 @@ If this is your first PR be sure to add yourself to the
 
 TBD
 
+## Architecture of a TigerBeetle Client ##
+
+We _submit_ a `tb_packet_t` with the _operation_ we want to perform to
+the `tb_client` library.  That's how we create accounts, transfers,
+and do queries.
+
+``` mermaid
+Haskell->>tb_client: submit an operation packet with on_completion_ctx 1
+tb_client->>Haskell: on_completion with on_completion_ctx 1, return tb_packet
+```
+
+We then get the response back in `tb_packet` again through the
+`on_completion` callback, asynchronously.
+
 ## Conduct ##
 
 This is an open source project and runs on volunteer power.  There
