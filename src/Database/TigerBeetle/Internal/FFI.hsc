@@ -173,19 +173,19 @@ instance Storable Packet where
 
 data TbAccount
   = TbAccount
-  { accountId        :: Word128
-  , debitsPending    :: Word128
-  , debitsPosted     :: Word128
-  , creditsPending   :: Word128
-  , creditsPosted    :: Word128
-  , userData128      :: Word128
-  , userData64       :: Word64
-  , userData32       :: Word32
-  , accountReserved  :: Word32
-  , ledger           :: Word32
-  , code             :: Word16
-  , flags            :: Word16
-  , accountTimestamp :: Word64
+  { tbAccountId             :: Word128
+  , tbAccountDebitsPending  :: Word128
+  , tbAccountDebitsPosted   :: Word128
+  , tbAccountCreditsPending :: Word128
+  , tbAccountCreditsPosted  :: Word128
+  , tbAccountUserData128    :: Word128
+  , tbAccountUserData64     :: Word64
+  , tbAccountUserData32     :: Word32
+  , tbAccountReserved       :: Word32
+  , tbAccountLedger         :: Word32
+  , tbAccountCode           :: Word16
+  , tbAccountFlags          :: Word16
+  , tbAccountTimestamp      :: Word64
   }
   deriving (Eq, Show)
 
@@ -211,19 +211,19 @@ instance Storable TbAccount where
       <*> #{peek tb_account_t, timestamp} ptr
 
     poke ptr account = do
-        #{poke tb_account_t, id} ptr account.accountId
-        #{poke tb_account_t, debits_pending} ptr account.debitsPending
-        #{poke tb_account_t, debits_posted} ptr account.debitsPosted
-        #{poke tb_account_t, credits_pending} ptr account.creditsPending
-        #{poke tb_account_t, credits_posted} ptr account.creditsPosted
-        #{poke tb_account_t, user_data_128} ptr account.userData128
-        #{poke tb_account_t, user_data_64} ptr account.userData64
-        #{poke tb_account_t, user_data_32} ptr account.userData32
-        #{poke tb_account_t, reserved} ptr account.accountReserved
-        #{poke tb_account_t, ledger} ptr account.ledger
-        #{poke tb_account_t, code} ptr account.code
-        #{poke tb_account_t, flags} ptr account.flags
-        #{poke tb_account_t, timestamp} ptr account.accountTimestamp
+        #{poke tb_account_t, id} ptr account.tbAccountId
+        #{poke tb_account_t, debits_pending} ptr account.tbAccountDebitsPending
+        #{poke tb_account_t, debits_posted} ptr account.tbAccountDebitsPosted
+        #{poke tb_account_t, credits_pending} ptr account.tbAccountCreditsPending
+        #{poke tb_account_t, credits_posted} ptr account.tbAccountCreditsPosted
+        #{poke tb_account_t, user_data_128} ptr account.tbAccountUserData128
+        #{poke tb_account_t, user_data_64} ptr account.tbAccountUserData64
+        #{poke tb_account_t, user_data_32} ptr account.tbAccountUserData32
+        #{poke tb_account_t, reserved} ptr account.tbAccountReserved
+        #{poke tb_account_t, ledger} ptr account.tbAccountLedger
+        #{poke tb_account_t, code} ptr account.tbAccountCode
+        #{poke tb_account_t, flags} ptr account.tbAccountFlags
+        #{poke tb_account_t, timestamp} ptr account.tbAccountTimestamp
 
 -- Helper functions for packet creation and manipulation
 allocaPacket :: (Ptr Packet -> IO a) -> IO a
