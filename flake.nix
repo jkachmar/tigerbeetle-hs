@@ -75,7 +75,8 @@
     }: {
       tigerbeetle-hs = hsPkgs.tigerbeetle-hs;
       libtb_client = (import ./nix/libtb_client.nix) {inherit pkgs tigerbeetle-src;};
-      default = hsPkgs.tigerbeetle-hs;
+        default = hsPkgs.tigerbeetle-hs;
+      glibc = pkgs.glibc;
     });
 
     # You can't build the tigerbeetle-hs package as a check because of IFD in cabal2nix
