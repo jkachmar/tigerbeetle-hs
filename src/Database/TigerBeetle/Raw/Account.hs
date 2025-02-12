@@ -11,10 +11,11 @@ import Foreign.Marshal.Alloc
 import Foreign.Ptr
 import Foreign.Storable
 
-createAccounts :: [Account] -> IO Packet
+createAccounts :: [Account] -> IO (Ptr Packet)
 createAccounts accounts = do
   accountData <- pack accounts
-  pure
+  packetPtr <- newPacket
+  poke packetPtr
     $ Packet
     { next         = nullPtr
     , userData     = nullPtr -- TODO: This should be a generated
@@ -28,7 +29,8 @@ createAccounts accounts = do
     , batchTail    = nullPtr
     , batchSize    = 0
     , reserved     = []
-  }
+    }
+  pure packetPtr
   where
     pack :: [Account] -> IO (Ptr TbAccount)
     pack accts = do
