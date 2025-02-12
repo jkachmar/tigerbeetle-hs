@@ -300,3 +300,12 @@ foreign import ccall safe "tb_client.h tb_client_deinit"
 
 foreign import ccall "wrapper"
     makeCompletionCallback :: CompletionCallback -> IO (FunPtr CompletionCallback)
+
+newtype ClientId = ClientId { getClientId :: Ptr Word8 }
+
+newClientId :: Word128 -> IO ClientId
+newClientId (Word128 hi lo) = do
+  idPtr <- callocBytes 16
+  poke idPtr hi
+  poke idPtr lo
+  pure $ ClientId $ castPtr @Word64 @Word8 idPtr
