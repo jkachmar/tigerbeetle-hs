@@ -52,21 +52,23 @@ build-type:      Simple
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files: CHANGELOG.md
 
-common warnings
+common defaults
   ghc-options: -Wall
+  default-language: Haskell2010
+  build-depends:
+    , base          ^>=4.18.0.0
 
 library
-  -- Import common warning flags.
-  import:           warnings
-
-  -- Modules exported by the library.
+  import:           defaults
   exposed-modules:  Database.TigerBeetle
 
   -- Modules included in this library but not exported.
   other-modules:
     Database.TigerBeetle.Client.Account
     Database.TigerBeetle.Internal.FFI
+    Database.TigerBeetle.Internal.FFI.Client
     Database.TigerBeetle.Raw.Account
+    Database.TigerBeetle.Raw.Queue
 
   -- LANGUAGE extensions used by modules in this package.
   default-extensions:
@@ -79,29 +81,26 @@ library
     , bytestring
     , stm
     , text
-    , storable-enum ==0.0
     , wide-word     ==0.1.6.0
 
   -- Directories containing source files.
   hs-source-dirs:   src
 
   -- Base language which the package is written in.
-  default-language: Haskell2010
   include-dirs:     include
   extra-libraries:  tb_client
 
 executable tigerbeetle-hs
-  import:         warnings
+  import:         defaults
   main-is:        Main.hs
   hs-source-dirs: app
   build-depends:  
-    , base
     , tigerbeetle-hs
     , stm
 
 test-suite tigerbeetle-hs-test
   -- Import common warning flags.
-  import:           warnings
+  import:           defaults
 
   -- Base language which the package is written in.
   default-language: Haskell2010
@@ -123,5 +122,4 @@ test-suite tigerbeetle-hs-test
 
   -- Test dependencies.
   build-depends:
-    , base            ^>=4.17.2.1
     , tigerbeetle-hs

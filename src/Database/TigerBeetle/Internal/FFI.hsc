@@ -8,7 +8,6 @@
 module Database.TigerBeetle.Internal.FFI where
 
 import Control.Monad
-import Data.Enum.Storable (T)
 import Data.Word
 import Data.WideWord
 import Foreign.C.Types
@@ -125,7 +124,7 @@ data Packet = Packet
     { next        :: Ptr Packet      -- ^ next pointer
     , userData    :: Ptr ()          -- ^ user_data void pointer
     , operation   :: Word8           -- ^ operation field
-    , status      :: T Word8 PacketStatus    -- ^ status field
+    , status      :: PacketStatus    -- ^ status field
     , dataSize    :: Word32          -- ^ data_size field
     , packetData  :: Ptr ()          -- ^ data void pointer
     , batchNext   :: Ptr Packet      -- ^ batch_next pointer
@@ -147,7 +146,7 @@ instance Storable Packet where
         <$> #{peek tb_packet_t, next} ptr
         <*> #{peek tb_packet_t, user_data} ptr
         <*> #{peek tb_packet_t, operation} ptr
-        <*> #{peek tb_packet_t, status} ptr
+        <*> fmap marshallPacketStatus (#{peek tb_packet_t, status} ptr)
         <*> #{peek tb_packet_t, data_size} ptr
         <*> #{peek tb_packet_t, data} ptr
         <*> #{peek tb_packet_t, batch_next} ptr
@@ -160,7 +159,7 @@ instance Storable Packet where
         #{poke tb_packet_t, next} ptr packet.next
         #{poke tb_packet_t, user_data} ptr packet.userData
         #{poke tb_packet_t, operation} ptr packet.operation
-        #{poke tb_packet_t, status} ptr packet.status
+        #{poke tb_packet_t, status} ptr (unmarshallPacketStatus packet.status)
         #{poke tb_packet_t, data_size} ptr packet.dataSize
         #{poke tb_packet_t, data} ptr packet.packetData
         #{poke tb_packet_t, batch_next} ptr packet.batchNext
