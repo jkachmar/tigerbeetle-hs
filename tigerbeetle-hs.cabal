@@ -66,7 +66,6 @@ library
   other-modules:
     Database.TigerBeetle.Client.Account
     Database.TigerBeetle.Internal.FFI
-    Database.TigerBeetle.Internal.FFI.Client
     Database.TigerBeetle.Raw.Account
     Database.TigerBeetle.Raw.Queue
 
