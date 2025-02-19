@@ -93,7 +93,7 @@ executable tigerbeetle-hs
   import:         defaults
   main-is:        Main.hs
   hs-source-dirs: app
-  build-depends:  
+  build-depends:
     , tigerbeetle-hs
     , stm
 
