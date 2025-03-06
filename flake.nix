@@ -49,10 +49,10 @@
           canonical="${tigerbeetle-src}/src/clients/c/tb_client.h"
           local="./include/tb_client.h"
           cmp --silent $canonical $local || cat $canonical > $local
-          export LD_LIBRARY_PATH=${self.packages."${system}".libtb_client}/lib
+          # export LD_LIBRARY_PATH=${self.packages."${system}".libtb_client}/lib:$LD_LIBRARY_PATH
         '';
         packages = p: [
-          p.tigerbeetle-hs
+            p.tigerbeetle-hs
         ];
         buildInputs = with pkgs; [
           hsPkgs.haskell-language-server
@@ -76,6 +76,19 @@
       tigerbeetle-hs = hsPkgs.tigerbeetle-hs;
       libtb_client = (import ./nix/libtb_client.nix) {inherit pkgs tigerbeetle-src;};
       default = hsPkgs.tigerbeetle-hs;
+      zlib = pkgs.zlib;
+      curl = pkgs.curl;
+      gmp = pkgs.gmp;
+      libc = pkgs.libc;
+      libffi = pkgs.libffi;
+      make = pkgs.make;
+      musl = pkgs.musl;
+      autoconf = pkgs.autoconf;
+      automake = pkgs.automake;
+      bzip2 = pkgs.bzip2;
+      coreutils = pkgs.coreutils;
+      elfutils = pkgs.elfutils;
+      patchelf = pkgs.patchelf;
     });
 
     # You can't build the tigerbeetle-hs package as a check because of IFD in cabal2nix
