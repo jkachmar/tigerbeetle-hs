@@ -86,8 +86,8 @@ library
   hs-source-dirs:   src
 
   -- Base language which the package is written in.
-  include-dirs:     include
-  extra-libraries:  tb_client
+  default-language: Haskell2010
+  pkgconfig-depends: tb_client
 
 executable tigerbeetle-hs
   default-language:  Haskell2010

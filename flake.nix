@@ -8,7 +8,7 @@
     tigerbeetle-src.flake = false;
   };
 
-  outputs = {
+  outputs = inputs@{
     self,
     nixpkgs,
     tigerbeetle-src,
@@ -74,21 +74,9 @@
       ...
     }: {
       tigerbeetle-hs = hsPkgs.tigerbeetle-hs;
-      libtb_client = (import ./nix/libtb_client.nix) {inherit pkgs tigerbeetle-src;};
+      libtb_client = pkgs.callPackage ./nix/libtb_client.nix {src = inputs.tigerbeetle-src;};
       default = hsPkgs.tigerbeetle-hs;
-      zlib = pkgs.zlib;
-      curl = pkgs.curl;
-      gmp = pkgs.gmp;
-      libc = pkgs.libc;
-      libffi = pkgs.libffi;
-      make = pkgs.make;
-      musl = pkgs.musl;
-      autoconf = pkgs.autoconf;
-      automake = pkgs.automake;
-      bzip2 = pkgs.bzip2;
-      coreutils = pkgs.coreutils;
-      elfutils = pkgs.elfutils;
-      patchelf = pkgs.patchelf;
+      glibc = pkgs.glibc;
     });
 
     # You can't build the tigerbeetle-hs package as a check because of IFD in cabal2nix
