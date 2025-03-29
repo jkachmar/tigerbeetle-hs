@@ -4,7 +4,6 @@
 module Database.TigerBeetle.Raw.Account where
 
 import Control.Monad
-import Data.Enum.Storable (fromPlain)
 import Database.TigerBeetle.Client.Account (Account(..))
 import Database.TigerBeetle.Internal.FFI
 import Foreign.Marshal.Alloc
@@ -21,7 +20,7 @@ createAccounts accounts = do
     , userData     = nullPtr -- TODO: This should be a generated
                              -- id from client state
     , operation    = fromIntegral $ fromEnum CreateAccounts
-    , status       = fromPlain Ok
+    , status       = Ok
     , dataSize     = fromIntegral $ sizeOf accountData
     , packetData   = castPtr @TbAccount @() accountData
     , batchAllowed = 0
