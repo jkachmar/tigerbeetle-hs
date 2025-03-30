@@ -61,7 +61,31 @@ If this is your first PR be sure to add yourself to the
 
 ## Code Style Guidelines ##
 
-TBD
+### Avoid Stylistic Changes ###
+
+We prefer functional changes to source code over stylistic ones.
+
+If there isn't an established coding guidelines here prefer the style
+of the module your change is in.
+
+Reviewers have limited time and want to focus on changes that change
+the behaviour of the program rather than nitpicking formatting,
+naming, and syntax.
+
+### FFI Names Mirror C Names ###
+
+In order to avoid confusing developers working on the FFI modules the
+naming convention is to prefer naming Haskell types after the C types
+they marshal.
+
+    # C
+    tb_packet_t
+      ...
+    # Haskell
+    TBPacket
+
+Functions should follow the same convention but `camelCased` on the
+Haskell side.
 
 ## Architecture of a TigerBeetle Client ##
 
