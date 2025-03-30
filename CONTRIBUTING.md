@@ -86,6 +86,9 @@ they marshal.
 Functions should follow the same convention but `camelCased` on the
 Haskell side.
 
+This helps avoid having to import qualified internally and having
+multiple types with the same name that represent different things.
+
 ## Architecture of a TigerBeetle Client ##
 
 We _submit_ a `tb_packet_t` with the _operation_ we want to perform to
