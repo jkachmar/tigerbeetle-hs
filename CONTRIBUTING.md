@@ -89,6 +89,16 @@ Haskell side.
 This helps avoid having to import qualified internally and having
 multiple types with the same name that represent different things.
 
+### Design for Qualified Exports ###
+
+Modules that users import from the library should be designed to
+be imported qualified.
+
+Those same modules should also have an export list.
+
+Internal modules in the `Raw` and `FFI` name space do not need
+export lists.
+
 ## Architecture of a TigerBeetle Client ##
 
 We _submit_ a `tb_packet_t` with the _operation_ we want to perform to
