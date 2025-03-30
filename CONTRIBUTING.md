@@ -65,12 +65,11 @@ If this is your first PR be sure to add yourself to the
 
 We prefer functional changes to source code over stylistic ones.
 
-If there isn't an established coding guidelines here prefer the style
+If there isn't an established coding guideline here prefer the style
 of the module your change is in.
 
 Reviewers have limited time and want to focus on changes that change
-the behaviour of the program rather than nitpicking formatting,
-naming, and syntax.
+the behaviour of the program.
 
 ### FFI Names Mirror C Names ###
 
