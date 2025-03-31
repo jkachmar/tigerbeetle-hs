@@ -13,7 +13,7 @@
   outputs = inputs @ {
     self,
     nixpkgs,
-    tigerbeetle-src,
+    ...
   }: let
     forAllSystems = function:
       nixpkgs.lib.genAttrs [
@@ -47,14 +47,7 @@
     }:
       hsPkgs.shellFor {
         # withHoogle = true;
-        shellHook = ''
-          canonical="${tigerbeetle-src}/src/clients/c/tb_client.h"
-          local="./include/tb_client.h"
-          cmp --silent $canonical $local || cat $canonical > $local
-        '';
-        packages = p: [
-          p.tigerbeetle-hs
-        ];
+        packages = p: [ p.tigerbeetle-hs ];
         buildInputs = with pkgs; [
           hsPkgs.haskell-language-server
           haskellPackages.cabal-install
@@ -66,6 +59,7 @@
           pkgs.tigerbeetle
           self.packages.${system}.libtb_client
         ];
+        nativeBuildInputs = [ pkgs.pkgconf ];
       });
 
     # nix build
