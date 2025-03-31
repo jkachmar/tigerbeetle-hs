@@ -11,8 +11,11 @@ module Database.TigerBeetle.Internal.FFI.Client where
 import Data.Word
 import Foreign.Ptr
 import Foreign.Storable
+import Foreign.C.String
+import Foreign.C.Types
 import Data.Vector (Vector)
 import Data.Vector qualified as V
+import Database.TigerBeetle.Internal.FFI.Client.ClusterId
 
 #include "tb_client.h"
 
@@ -34,6 +37,47 @@ instance Storable TBClient where
     poke ptr client = do
       let opaquePtr = #{ptr tb_client_t, opaque} ptr
       V.iforM_ client.tbClientOpaque $ \i val -> pokeByteOff opaquePtr (i * 8) val
+
+data TBInitStatus =
+      Success
+    | Unexpected
+    | OutOfMemory
+    | AddressInvalid
+    | AddressLimitExceeded
+    | SystemResources
+    | NetworkSubsystem
+    deriving (Eq, Show)
+
+instance Enum TBInitStatus where
+    fromEnum Success              = #const TB_INIT_SUCCESS
+    fromEnum Unexpected           = #const TB_INIT_UNEXPECTED
+    fromEnum OutOfMemory          = #const TB_INIT_OUT_OF_MEMORY
+    fromEnum AddressInvalid       = #const TB_INIT_ADDRESS_INVALID
+    fromEnum AddressLimitExceeded = #const TB_INIT_ADDRESS_LIMIT_EXCEEDED
+    fromEnum SystemResources      = #const TB_INIT_SYSTEM_RESOURCES
+    fromEnum NetworkSubsystem     = #const TB_INIT_NETWORK_SUBSYSTEM
+
+    toEnum (#const TB_INIT_SUCCESS)                = Success
+    toEnum (#const TB_INIT_UNEXPECTED)             = Unexpected
+    toEnum (#const TB_INIT_OUT_OF_MEMORY)          = OutOfMemory
+    toEnum (#const TB_INIT_ADDRESS_INVALID)        = AddressInvalid
+    toEnum (#const TB_INIT_ADDRESS_LIMIT_EXCEEDED) = AddressLimitExceeded
+    toEnum (#const TB_INIT_SYSTEM_RESOURCES)       = SystemResources
+    toEnum (#const TB_INIT_NETWORK_SUBSYSTEM)      = NetworkSubsystem
+    toEnum unmatched = error $ "TBInitStatus.toEnum: Cannot match " ++ show unmatched
+
+data TBClientStatus =
+      ClientOk
+    | ClientInvalid
+    deriving (Eq, Show)
+
+instance Enum TBClientStatus where
+    fromEnum ClientOk      = #const TB_CLIENT_OK
+    fromEnum ClientInvalid = #const TB_CLIENT_INVALID
+
+    toEnum (#const TB_CLIENT_OK)      = ClientOk
+    toEnum (#const TB_CLIENT_INVALID) = ClientInvalid
+    toEnum unmatched = error $ "TBClientStatus.toEnum: Cannot match " ++ show unmatched
 
 data TBOperation =
       Pulse
@@ -140,3 +184,61 @@ instance Storable TBPacket where
         #{poke tb_packet_t, status} ptr (fromEnum packet.tbPacketStatus)
         let opaquePtr = #{ptr tb_packet_t, opaque} ptr
         V.iforM_ packet.tbPacketOpaque $ \i val -> pokeByteOff opaquePtr i val
+
+type TBCompletionContext = CUIntPtr
+
+-- TODO: add comments explaining what these represent, asked a question in TB slack 
+type TBCompletionCallback =
+  TBCompletionContext -> 
+  Ptr TBPacket ->
+  Word64 ->
+  Ptr Word8 ->
+  Word32 ->
+  IO ()
+
+foreign import ccall "wrapper"
+    makeCompletionCallback :: TBCompletionCallback -> IO (FunPtr TBCompletionCallback)
+
+foreign import ccall "tb_client.h tb_client_init"
+    c_tb_client_init
+      :: Ptr TBClient
+      -> Ptr Word8
+      -> CString
+      -> Word32
+      -> CUIntPtr 
+      -> FunPtr TBCompletionCallback 
+      -> IO Word32
+
+tbClientInit
+  :: Ptr TBClient
+  -> ClusterId
+  -> CString
+  -> Word32
+  -> TBCompletionContext
+  -> FunPtr TBCompletionCallback
+  -> IO TBInitStatus
+tbClientInit client clusterId addr addrLen ctx cb =
+    withClusterIdPointer clusterId $ \clusterIdPtr ->
+       toEnum . fromIntegral <$> c_tb_client_init client clusterIdPtr addr addrLen ctx cb
+
+foreign import ccall "tb_client.h tb_client_init_echo"
+    c_tb_client_init_echo
+      :: Ptr TBClient
+      -> Ptr Word8
+      -> CString
+      -> Word32
+      -> TBCompletionContext 
+      -> FunPtr TBCompletionCallback  
+      -> IO Word32
+
+tbClientInitEcho
+  :: Ptr TBClient
+  -> ClusterId
+  -> CString
+  -> Word32
+  -> TBCompletionContext
+  -> FunPtr TBCompletionCallback
+  -> IO TBInitStatus
+tbClientInitEcho client clusterId addr addrLen ctx cb =
+    withClusterIdPointer clusterId $ \clusterIdPtr ->
+       toEnum . fromIntegral <$> c_tb_client_init_echo client clusterIdPtr addr addrLen ctx cb
